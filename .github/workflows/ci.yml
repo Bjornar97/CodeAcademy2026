@@ -6,7 +6,7 @@ on:
         
 jobs:
   ci:
-    runs-on: ${{ vars.RUNNER || 'self-hosted' }}
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
       - name: Enable corepack
