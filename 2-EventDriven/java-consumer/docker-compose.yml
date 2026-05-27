@@ -12,8 +12,7 @@ services:
       - 5672:5672
       - 15672:15672
     volumes:
-      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
-      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+      - rabbitmq_data:/var/lib/rabbitmq
     networks:
       - code_academy_network
   postgres:
@@ -55,4 +54,5 @@ networks:
     driver: bridge
 
 volumes:
+  rabbitmq_data:
   postgres_data:
