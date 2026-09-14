@@ -144,6 +144,10 @@ services:
   # --- Samling 1: Idempotweet ----------------------------------------------
   # Ligger bak profil, ellers ville den okkupert port 3000 — som er porten
   # frontenden i samling 4 kjører på.
+  #
+  # NB: denne profilen bygger med 1-DevOps/2-Docker/Dockerfile, altså Dockerfila
+  # du skrev selv i samling 1. Har du ikke skrevet den, kopier inn
+  # Dockerfile-solution fra samme mappe først.
   idempotweet:
     container_name: idempotweet
     profiles: ["idempotweet"]
