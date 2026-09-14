@@ -36,7 +36,10 @@ function getConnection(): Promise<ChannelModel> {
   return globalForAmqp.__kaffebarConnection;
 }
 
-export async function subscribeToOrders(onEvent: EventHandler): Promise<Subscription> {
+export async function subscribeToOrders(
+  onEvent: EventHandler,
+  onClosed?: () => void,
+): Promise<Subscription> {
   if (USE_MOCK_API) {
     const { subscribeToMockOrders } = await import("@/mocks/events");
     return subscribeToMockOrders(onEvent);
@@ -44,6 +47,14 @@ export async function subscribeToOrders(onEvent: EventHandler): Promise<Subscrip
 
   const connection = await getConnection();
   const channel = await connection.createChannel();
+
+  // Dør kanalen — fordi broker forsvant, eller fordi noen startet den på nytt — er
+  // abonnementet vårt borte for godt. Da sier vi fra, slik at route handleren kan
+  // lukke strømmen og la nettleseren koble seg opp igjen med et nytt abonnement.
+  channel.on("error", () => {
+    // «close» kommer rett etterpå. Lytteren må finnes, ellers kaster amqplib.
+  });
+  channel.on("close", () => onClosed?.());
 
   // 1. Exchangen finnes allerede — API-et deklarerte den da det startet. Vi
   //    deklarerer den likevel: assertExchange er idempotent, og da spiller det

@@ -309,7 +309,8 @@ En skjerm som viser gamle tall uten å si fra, er verre enn en som er ærlig.
   `ConnectionState`. Bruk den: si fra i grensesnittet at oppdateringene er borte, og hent
   alt på nytt når forbindelsen er tilbake.
 * **Verdt å vite:**
-  - `EventSource` kobler opp igjen av seg selv. Men tilstanden på serveren har endret seg
+  - `EventSource` kobler opp igjen av seg selv, og serveren lukker strømmen når
+    abonnementet dør, nettopp for å utløse det. Men tilstanden på serveren har endret seg
     mens du var nede, så hva må skje i det øyeblikket du er tilbake?
   - Hvordan vil du vise det? Et banner, en dempet farge på lista, eller et «sist
     oppdatert»-tidsstempel? Prøv minst to og se hva som faktisk er til å forstå.

@@ -25,6 +25,9 @@ export const runtime = "nodejs"; // amqplib bruker sockets — dette kan ikke kj
  *     gjennom lastbalanserere som kutter en stille strøm.
  *   - Opprydding på `request.signal`: uten den blir det liggende igjen en kø på
  *     broker for hver fane noen har åpnet.
+ *   - Dør abonnementet, lukker vi strømmen. Da kobler nettleseren seg opp igjen av
+ *     seg selv og får et nytt abonnement. Uten dette blir strømmen stående åpen og
+ *     stille etter at broker har vært nede, og skjermen sier «live» uten å være det.
  *
  * Det du skriver i runde 2 er abonnementet under: `src/lib/rabbitmq.ts`.
  */
@@ -71,7 +74,15 @@ export async function GET(request: NextRequest) {
       request.signal.addEventListener("abort", () => void cleanup());
 
       try {
-        subscription = await subscribeToOrders(sendEvent);
+        subscription = await subscribeToOrders(sendEvent, () => {
+          // Abonnementet er dødt. Vi lukker strømmen i stedet for å bli stående og
+          // si «live» uten å ha noe å sende: nettleseren kobler seg opp igjen av
+          // seg selv, og da lages et nytt abonnement.
+          send(
+            `event: error\ndata: ${JSON.stringify({ message: "Mistet forbindelsen til RabbitMQ" })}\n\n`,
+          );
+          void cleanup();
+        });
       } catch (error) {
         // RabbitMQ er nede. Da sier vi fra i stedet for å henge: klienten viser
         // «frakoblet» og lista faller tilbake på vanlig henting.
