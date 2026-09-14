@@ -34,6 +34,11 @@ ser bestillingen flytte seg mellom kolonnene i den andre, uten å laste siden p�
 > Oppgave 3 til 6 trenger ingen ny infrastruktur, så blir du tidlig ferdig, er det bare å
 > begynne på dem.
 >
+> Står du fast, kan du bruke en AI-agent som hjelper i stedet for fasiten.
+> [`AI-HJELPER.md`](AI-HJELPER.md) inneholder en ferdig prompt du limer inn: den stiller
+> spørsmål i stedet for å skrive koden for deg, og sender deg til fasiten når du ber om
+> det.
+>
 > Vi går **ikke** gjennom løsningen i plenum. Fasitfilene er derfor skrevet slik at de kan
 > leses alene: hver av dem forklarer valgene sine, og `src/app/api/events/route.ts`
 > forklarer hvorfor hver ferdige bit ligger der. Les dem når du er ferdig, eller på veien
