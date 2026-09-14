@@ -407,9 +407,9 @@ dag, og samling 6 tar AI-delen skikkelig.
 
 ## Hvis Docker ikke vil
 
-`USE_MOCK_API=true yarn dev` starter en MSW-mock inne i Next-prosessen. Den svarer som
-Kaffebar-API-et, med samme meny, samme statusflyt og en auto-barista som flytter
-bestillinger hvert åttende sekund.
+`USE_MOCK_API=true yarn dev` lar appen svare fra et lager i minnet i stedet for fra
+Kaffebar-API-et: samme meny, samme statusflyt og en auto-barista som flytter bestillinger
+hvert åttende sekund.
 
 Runde 1 fungerer i sin helhet uten containere. Runde 2 trenger en broker å abonnere på, så
 får du ikke containerne opp: gjør oppgave 1, og les fasiten for oppgave 2. Den er skrevet

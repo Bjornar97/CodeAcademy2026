@@ -1,4 +1,4 @@
-import { KAFFEBAR_API_URL } from "./config";
+import { KAFFEBAR_API_URL, USE_MOCK_API } from "./config";
 import type { Coffee, CreateOrderRequest, Order, OrderStatus, Problem } from "@/types/domain";
 
 /**
@@ -22,6 +22,9 @@ import type { Coffee, CreateOrderRequest, Order, OrderStatus, Problem } from "@/
  * Alt her kjører på serveren. Nettleseren snakker med Next-appen, Next-appen
  * snakker med Kaffebar-API-et — appen er sin egen BFF. Derfor er
  * KAFFEBAR_API_URL ikke prefikset med NEXT_PUBLIC_.
+ *
+ * Kjører du med USE_MOCK_API=true, går hver funksjon rett i minnelageret i
+ * stedet for ut på nettverket. Se `src/mocks/api.ts`.
  */
 
 /**
@@ -45,6 +48,8 @@ async function handle<T>(response: Response): Promise<T> {
 
 /** GET /menu */
 export async function fetchMenu(): Promise<Coffee[]> {
+  if (USE_MOCK_API) return (await import("@/mocks/api")).mockFetchMenu();
+
   // Menyen endrer seg ikke under en workshop. 60 sekunders cache er nok til at
   // et sideskifte føles umiddelbart, uten at den blir feil hvis du endrer seed.
   const response = await fetch(`${KAFFEBAR_API_URL}/menu`, { next: { revalidate: 60 } });
@@ -55,6 +60,8 @@ export async function fetchMenu(): Promise<Coffee[]> {
 export async function fetchOrders(
   params: { status?: OrderStatus; limit?: number } = {},
 ): Promise<Order[]> {
+  if (USE_MOCK_API) return (await import("@/mocks/api")).mockFetchOrders(params);
+
   const query = new URLSearchParams();
   if (params.status) query.set("status", params.status);
   query.set("limit", String(params.limit ?? 100));
@@ -66,6 +73,8 @@ export async function fetchOrders(
 
 /** POST /orders */
 export async function createOrder(request: CreateOrderRequest): Promise<Order> {
+  if (USE_MOCK_API) return (await import("@/mocks/api")).mockCreateOrder(request);
+
   const response = await fetch(`${KAFFEBAR_API_URL}/orders`, {
     method: "POST",
     headers: { "content-type": "application/json" },
@@ -83,6 +92,10 @@ export async function createOrder(request: CreateOrderRequest): Promise<Order> {
  * varianten i samling 3 — se FASIT.md i 3-APIs/kaffebar-java-solution.)
  */
 export async function updateOrderStatus(orderId: string, status: OrderStatus): Promise<Order> {
+  if (USE_MOCK_API) {
+    return (await import("@/mocks/api")).mockUpdateOrderStatus(orderId, status);
+  }
+
   const response = await fetch(`${KAFFEBAR_API_URL}/orders/${orderId}`, {
     method: "PATCH",
     headers: { "content-type": "application/json" },

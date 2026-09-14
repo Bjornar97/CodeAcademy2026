@@ -104,11 +104,13 @@ Det er ekstraoppgave 8, og den beste testen på om kontrakten din faktisk holder
 USE_MOCK_API=true yarn dev
 ```
 
-Starter en MSW-mock inne i Next-prosessen som svarer som `kaffebar-api`: samme meny,
-samme statusflyt, og en auto-barista som flytter ordrer hvert åttende sekund. Runde 1
+Appen svarer da fra et lager i minnet i stedet for fra `kaffebar-api`: samme meny, samme
+statusflyt, og en auto-barista som flytter bestillinger hvert åttende sekund. Runde 1
 fungerer i sin helhet uten en eneste container; runde 2 trenger en broker.
 
-Koden ligger i `src/mocks/`, og startes fra `instrumentation.ts`.
+Koden ligger i `src/mocks/`. `src/lib/api.ts` går rett dit i mock-modus, og
+`instrumentation.ts` starter auto-baristaen. Det er ingen nettverkskall involvert, og
+derfor heller ingenting som kan feile halvveis.
 
 ## Godt å vite i utviklingsmodus
 
