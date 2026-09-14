@@ -195,8 +195,9 @@ Endre så én linje i `src/hooks/useOrders.ts`:
 + const EVENTS_URL = "/api/events";
 ```
 
-Nå står skjermen stille igjen. Ruta `/api/events` finnes, men abonnementet under den er
-ikke skrevet. Det er oppgave 2.
+Nå står skjermen stille igjen, og indikatoren går tilbake til «Frakoblet». Ruta
+`/api/events` finnes, men abonnementet under den er ikke skrevet, og serveren sier fra om
+det i stedet for å late som alt er i orden. Det er oppgave 2.
 
 ### Oppgave 2: Abonner på RabbitMQ
 

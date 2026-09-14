@@ -107,10 +107,20 @@ export async function subscribeToOrders(onEvent: EventHandler): Promise<Subscrip
   //
   // Står du fast: `rabbitmq-solution.ts` i samme mappe.
   // ---------------------------------------------------------------------------
-  // De to linjene under holder bare kompilatoren og linteren i ro fram til du har
-  // skrevet TODO-en over. Slett dem når du er ferdig.
+  // Vakten under holder kompilatoren i ro, og sier samtidig fra så lenge oppgaven
+  // ikke er løst. Uten den ville route handleren meldt «klar» til nettleseren selv
+  // om ingen hendelser kunne komme, og indikatoren hadde stått på «Live» og løyet.
+  // Den forsvinner av seg selv når du setter `consumerTag` i consume-kallet.
   void RABBITMQ_EXCHANGE;
   void onEvent;
+
+  if (!consumerTag) {
+    await channel.close();
+    throw new Error(
+      "Abonnementet i src/lib/rabbitmq.ts er ikke skrevet ferdig: consumerTag er ikke satt. " +
+        "Se oppgave 2 i 4-Frontend/oppgave.md.",
+    );
+  }
 
   return {
     close: async () => {
